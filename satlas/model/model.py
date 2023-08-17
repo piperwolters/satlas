@@ -77,12 +77,13 @@ class RRDBNetBackbone(torch.nn.Module):
     def __init__(self, num_channels, backbone_cfg):
         super(RRDBNetBackbone, self).__init__()
 
-        self.conv_first = nn.Conv2d(num_in_ch, num_feat, 3, 1, 1)
+        num_feat = 64
+        num_grow_ch = 32
+        num_block = 23
+
+        self.conv_first = nn.Conv2d(num_channels, num_feat, 3, 1, 1)
         self.body = make_layer(RRDB, num_block, num_feat=num_feat, num_grow_ch=num_grow_ch)
         self.conv_body = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
-        self.conv_hr = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
-        self.conv_last = nn.Conv2d(num_feat, num_out_ch, 3, 1, 1)
-        self.lrelu = nn.LeakyReLU(negative_slope=0.2, inplace=True)
 
         self.out_channels = [
             [1, 128],
